@@ -1063,6 +1063,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
   }
 }
 
+//Returning Data
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1144,6 +1145,80 @@ class SelectionScreen extends StatelessWidget {
   }
 }
 
+//To Do List
+class Todo {
+  final String title;
+  final String description;
+
+  Todo(this.title, this.description);
+}
+
+final todos = List.generate(
+  20,
+  (i) => Todo(
+    'Todo $i',
+    'A description of what needs to be done for Todo $i',
+  ),
+);
+
+class TodosScreen extends StatelessWidget {
+  final List<Todo> todos;
+
+  //requiring the list of todos
+  TodosScreen({Key? key, required this.todos}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Todos'),
+      ),
+      //passing in the ListView.builder
+      body: ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(todos[index].title),
+            // When a user taps the ListTile, navigate to the DetailScreen.
+            // Notice that you're not only creating a DetailScreen, you're
+            // also passing the current todo through to it.
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailScreen(todo: todos[index]),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  // 声明一个成员变量来保存 Todo 对象 (Declare a field that holds the Todo)
+  final Todo todo;
+
+  // 构造函数需要 Todo 对象 (In the constructor, require a Todo)
+  DetailScreen({Key? key, required this.todo}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // 使用 Todo 对象构建 UI (Use the Todo to create the UI)
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(todo.title),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Text(todo.description),
+      ),
+    );
+  }
+}
+
 void main() {
   //runApp(MyApp());
 
@@ -1217,10 +1292,24 @@ void main() {
   //debugPaintSizeEnabled = true; //Remove to supress visual layout
   debugPaintSizeEnabled = false; // Set to true for visual layout
   //runApp(MyApp());
-  runApp(
-    MaterialApp(
-      title: 'Returning Data',
-      home: HomeScreen(),
+
+  // runApp(
+  //   MaterialApp(
+  //     title: 'Returning Data',
+  //     home: HomeScreen(),
+  //   ),
+  // );
+
+  runApp(MaterialApp(
+    title: 'Passing Data',
+    home: TodosScreen(
+      todos: List.generate(
+        20,
+        (i) => Todo(
+          'Todo $i',
+          'A description of what needs to be done for Todo $i',
+        ),
+      ),
     ),
-  );
+  ));
 }
