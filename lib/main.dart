@@ -1063,6 +1063,87 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
   }
 }
 
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Return Data Demo'),
+      ),
+      body: Center(child: SelectionButton()),
+    );
+  }
+}
+
+class SelectionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _navigateAndDisplaySelection(context);
+      },
+      child: Text('Pick on option,any option'),
+    );
+  }
+
+  // A method that launches the SelectionScreen and awaits the result from
+  // Navigator.pop.
+  void _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => SelectionScreen()),
+    );
+
+    // After the Selection Screen returns a result, hide any previous snackbars
+    // and show the new result.
+    // 等选择界面返回结果，先隐藏之前的 snackbars，结果显示在新的 snackbars 里  (After the Selection Screen returns a result, hide any previous snackbars and show the new result!)
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('$result')));
+  }
+}
+
+class SelectionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pick an option'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // 在这里返回 "Yep" (Pop here with "Yep"...)
+                  Navigator.pop(context, 'Yep!');
+                },
+                child: Text('Yep!'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Pop here with "Nope"...
+                  Navigator.pop(context, 'Nope.');
+                },
+                child: Text('Nope.'),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 void main() {
   //runApp(MyApp());
 
@@ -1135,5 +1216,11 @@ void main() {
 
   //debugPaintSizeEnabled = true; //Remove to supress visual layout
   debugPaintSizeEnabled = false; // Set to true for visual layout
-  runApp(MyApp());
+  //runApp(MyApp());
+  runApp(
+    MaterialApp(
+      title: 'Returning Data',
+      home: HomeScreen(),
+    ),
+  );
 }
