@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
+
+import 'dart:async';
+import 'dart:convert';
 
 // class MyApp extends StatelessWidget {
 //   @override
@@ -893,175 +897,175 @@ class _ShoppingListState extends State<ShopppingList> {
 // }
 
 //A Example Widget App
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // #docregion titleSection
-    Widget titleSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Row(
-        children: [
-          Expanded(
-            //1
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //2
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    'Oeschimen Lake Campground',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Text(
-                  'Kandersteg, Swizerland',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          //3
-          // Icon(
-          //   Icons.star,
-          //   color: Colors.red[500],
-          // ),
-          // Text('41')
-          FavoriteWidget(),
-        ],
-      ),
-    );
-    // #enddocregion titleSection
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     // #docregion titleSection
+//     Widget titleSection = Container(
+//       padding: const EdgeInsets.all(32),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             //1
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 //2
+//                 Container(
+//                   padding: const EdgeInsets.only(bottom: 8),
+//                   child: Text(
+//                     'Oeschimen Lake Campground',
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                 ),
+//                 Text(
+//                   'Kandersteg, Swizerland',
+//                   style: TextStyle(
+//                     color: Colors.grey[500],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           //3
+//           // Icon(
+//           //   Icons.star,
+//           //   color: Colors.red[500],
+//           // ),
+//           // Text('41')
+//           FavoriteWidget(),
+//         ],
+//       ),
+//     );
+//     // #enddocregion titleSection
 
-    Color color = Theme.of(context).primaryColor;
+//     Color color = Theme.of(context).primaryColor;
 
-    Widget buttonSection = Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildButtonColumn(color, Icons.call, 'Call'),
-          _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
-          _buildButtonColumn(color, Icons.share, 'SHARE'),
-        ],
-      ),
-    );
+//     Widget buttonSection = Container(
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: [
+//           _buildButtonColumn(color, Icons.call, 'Call'),
+//           _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
+//           _buildButtonColumn(color, Icons.share, 'SHARE'),
+//         ],
+//       ),
+//     );
 
-    // #docregion textSection
-    Widget textSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Text(
-        'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-        'Alps. Situated 1,578 meters above sea level, it is one of the '
-        'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-        'half-hour walk through pastures and pine forest, leads you to the '
-        'lake, which warms to 20 degrees Celsius in the summer. Activities '
-        'enjoyed here include rowing, and riding the summer toboggan run.',
-        softWrap: true,
-      ),
-    );
-    // #enddocregion textSection
+//     // #docregion textSection
+//     Widget textSection = Container(
+//       padding: const EdgeInsets.all(32),
+//       child: Text(
+//         'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
+//         'Alps. Situated 1,578 meters above sea level, it is one of the '
+//         'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
+//         'half-hour walk through pastures and pine forest, leads you to the '
+//         'lake, which warms to 20 degrees Celsius in the summer. Activities '
+//         'enjoyed here include rowing, and riding the summer toboggan run.',
+//         softWrap: true,
+//       ),
+//     );
+//     // #enddocregion textSection
 
-    return MaterialApp(
-      title: "Flutter layout demo",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter layout demo'),
-        ),
-        // body: Center(
-        //   child: Text('Hello World'),
-        // ),
-        body: ListView(
-          children: [
-            Image.asset(
-              'images/lake.jpg',
-              width: 600,
-              height: 240,
-              fit: BoxFit.cover,
-            ),
-            titleSection,
-            buttonSection,
-            textSection,
-          ],
-        ),
-      ),
-    );
-  }
+//     return MaterialApp(
+//       title: "Flutter layout demo",
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text('Flutter layout demo'),
+//         ),
+//         // body: Center(
+//         //   child: Text('Hello World'),
+//         // ),
+//         body: ListView(
+//           children: [
+//             Image.asset(
+//               'images/lake.jpg',
+//               width: 600,
+//               height: 240,
+//               fit: BoxFit.cover,
+//             ),
+//             titleSection,
+//             buttonSection,
+//             textSection,
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: color,
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   Column _buildButtonColumn(Color color, IconData icon, String label) {
+//     return Column(
+//       mainAxisSize: MainAxisSize.min,
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         Icon(
+//           icon,
+//           color: color,
+//         ),
+//         Container(
+//           margin: const EdgeInsets.only(top: 8),
+//           child: Text(
+//             label,
+//             style: TextStyle(
+//               fontSize: 12,
+//               fontWeight: FontWeight.w400,
+//               color: color,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-class FavoriteWidget extends StatefulWidget {
-  @override
-  _FavoriteWidgetState createState() => _FavoriteWidgetState();
-}
+// class FavoriteWidget extends StatefulWidget {
+//   @override
+//   _FavoriteWidgetState createState() => _FavoriteWidgetState();
+// }
 
-class _FavoriteWidgetState extends State<FavoriteWidget> {
-  bool _isFavorited = true;
-  int _favoriteCount = 41;
+// class _FavoriteWidgetState extends State<FavoriteWidget> {
+//   bool _isFavorited = true;
+//   int _favoriteCount = 41;
 
-  void _toggleFavorite() {
-    setState(() {
-      if (_isFavorited) {
-        _favoriteCount -= 1;
-        _isFavorited = false;
-      } else {
-        _favoriteCount += 1;
-        _isFavorited = true;
-      }
-    });
-  }
+//   void _toggleFavorite() {
+//     setState(() {
+//       if (_isFavorited) {
+//         _favoriteCount -= 1;
+//         _isFavorited = false;
+//       } else {
+//         _favoriteCount += 1;
+//         _isFavorited = true;
+//       }
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: EdgeInsets.all(0),
-          child: IconButton(
-            padding: EdgeInsets.all(0),
-            alignment: Alignment.centerRight,
-            icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
-            color: Colors.red[500],
-            onPressed: _toggleFavorite,
-          ),
-        ),
-        SizedBox(
-          width: 18,
-          child: Container(
-            child: Text('$_favoriteCount'),
-          ),
-        )
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Container(
+//           padding: EdgeInsets.all(0),
+//           child: IconButton(
+//             padding: EdgeInsets.all(0),
+//             alignment: Alignment.centerRight,
+//             icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
+//             color: Colors.red[500],
+//             onPressed: _toggleFavorite,
+//           ),
+//         ),
+//         SizedBox(
+//           width: 18,
+//           child: Container(
+//             child: Text('$_favoriteCount'),
+//           ),
+//         )
+//       ],
+//     );
+//   }
+// }
 
 //Returning Data
 class HomeScreen extends StatelessWidget {
@@ -1146,74 +1150,192 @@ class SelectionScreen extends StatelessWidget {
 }
 
 //To Do List
-class Todo {
-  final String title;
-  final String description;
+// class Todo {
+//   final String title;
+//   final String description;
 
-  Todo(this.title, this.description);
+//   Todo(this.title, this.description);
+// }
+
+// final todos = List.generate(
+//   20,
+//   (i) => Todo(
+//     'Todo $i',
+//     'A description of what needs to be done for Todo $i',
+//   ),
+// );
+
+// class TodosScreen extends StatelessWidget {
+//   final List<Todo> todos;
+
+//   //requiring the list of todos
+//   TodosScreen({Key? key, required this.todos}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Todos'),
+//       ),
+//       //passing in the ListView.builder
+//       body: ListView.builder(
+//         itemCount: todos.length,
+//         itemBuilder: (context, index) {
+//           return ListTile(
+//             title: Text(todos[index].title),
+//             // When a user taps the ListTile, navigate to the DetailScreen.
+//             // Notice that you're not only creating a DetailScreen, you're
+//             // also passing the current todo through to it.
+//             onTap: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => DetailScreen(todo: todos[index]),
+//                 ),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+// class DetailScreen extends StatelessWidget {
+//   // 声明一个成员变量来保存 Todo 对象 (Declare a field that holds the Todo)
+//   final Todo todo;
+
+//   // 构造函数需要 Todo 对象 (In the constructor, require a Todo)
+//   DetailScreen({Key? key, required this.todo}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // 使用 Todo 对象构建 UI (Use the Todo to create the UI)
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(todo.title),
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.all(16.0),
+//         child: Text(todo.description),
+//       ),
+//     );
+//   }
+// }
+
+//Delete Data IN The Internet
+Future<Album> fetchAlbum() async {
+  final response = await http.get(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+  );
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response, then parse the JSON.
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response, then throw an exception.
+    throw Exception('Failed to load album');
+  }
 }
 
-final todos = List.generate(
-  20,
-  (i) => Todo(
-    'Todo $i',
-    'A description of what needs to be done for Todo $i',
-  ),
-);
+Future<Album> deleteAlbum(String id) async {
+  final http.Response response = await http.delete(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
 
-class TodosScreen extends StatelessWidget {
-  final List<Todo> todos;
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON. After deleting,
+    // you'll get an empty JSON `{}` response.
+    // Don't return `null`, otherwise `snapshot.hasData`
+    // will always return false on `FutureBuilder`.
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a "200 OK response",
+    // then throw an exception.
+    throw Exception('Failed to delete album.');
+  }
+}
 
-  //requiring the list of todos
-  TodosScreen({Key? key, required this.todos}) : super(key: key);
+class Album {
+  final int? id;
+  final String? title;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Todos'),
-      ),
-      //passing in the ListView.builder
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(todos[index].title),
-            // When a user taps the ListTile, navigate to the DetailScreen.
-            // Notice that you're not only creating a DetailScreen, you're
-            // also passing the current todo through to it.
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(todo: todos[index]),
-                ),
-              );
-            },
-          );
-        },
-      ),
+  Album({this.id, this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      id: json['id'],
+      title: json['title'],
     );
   }
 }
 
-class DetailScreen extends StatelessWidget {
-  // 声明一个成员变量来保存 Todo 对象 (Declare a field that holds the Todo)
-  final Todo todo;
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
 
-  // 构造函数需要 Todo 对象 (In the constructor, require a Todo)
-  DetailScreen({Key? key, required this.todo}) : super(key: key);
+  @override
+  _MyAppState createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  late Future<Album> _futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureAlbum = fetchAlbum();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 使用 Todo 对象构建 UI (Use the Todo to create the UI)
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(todo.title),
+    return MaterialApp(
+      title: 'Delete Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(todo.description),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Delete Data Example'),
+        ),
+        body: Center(
+          child: FutureBuilder<Album>(
+            future: _futureAlbum,
+            builder: (context, snapshot) {
+              // If the connection is done,
+              // check for response data or an error.
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('${snapshot.data?.title ?? 'Deleted'}'),
+                      ElevatedButton(
+                        child: Text('Delete Data'),
+                        onPressed: () {
+                          setState(() {
+                            _futureAlbum =
+                                deleteAlbum(snapshot.data!.id.toString());
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+              }
+
+              // By default, show a loading spinner.
+              return CircularProgressIndicator();
+            },
+          ),
+        ),
       ),
     );
   }
@@ -1291,7 +1413,7 @@ void main() {
 
   //debugPaintSizeEnabled = true; //Remove to supress visual layout
   debugPaintSizeEnabled = false; // Set to true for visual layout
-  //runApp(MyApp());
+  runApp(MyApp());
 
   // runApp(
   //   MaterialApp(
@@ -1300,16 +1422,16 @@ void main() {
   //   ),
   // );
 
-  runApp(MaterialApp(
-    title: 'Passing Data',
-    home: TodosScreen(
-      todos: List.generate(
-        20,
-        (i) => Todo(
-          'Todo $i',
-          'A description of what needs to be done for Todo $i',
-        ),
-      ),
-    ),
-  ));
+  // runApp(MaterialApp(
+  //   title: 'Passing Data',
+  //   home: TodosScreen(
+  //     todos: List.generate(
+  //       20,
+  //       (i) => Todo(
+  //         'Todo $i',
+  //         'A description of what needs to be done for Todo $i',
+  //       ),
+  //     ),
+  //   ),
+  // ));
 }
