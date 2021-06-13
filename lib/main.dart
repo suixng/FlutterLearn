@@ -1359,6 +1359,8 @@ class HomeScreen extends StatelessWidget {
 //   }
 // }
 
+
+//Send data to a new screen
 class HeroApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
