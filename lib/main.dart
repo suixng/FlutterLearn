@@ -1162,10 +1162,13 @@ class FirstRoute extends StatelessWidget {
           child: Text('Open route'),
           onPressed: () {
             //Navigate to the second route when tapped.
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => SecondRoute()),
+            // );
+            // Navigate to the second screen using a named route.
+            // 使用命名路由跳转到第二个界面（Navigate to the second screen using a named route）
+            Navigator.pushNamed(context, '/second');
           },
         ),
       ),
@@ -1548,10 +1551,29 @@ void main() {
   //   ),
   // );
 
+  // runApp(
+  //   MaterialApp(
+  //     title: 'Navigation Basics',
+  //     home: FirstRoute(),
+  //   ),
+  // );
+
   runApp(
     MaterialApp(
-      title: 'Navigation Basics',
-      home: FirstRoute(),
+      title: 'Named Routes Demo',
+      // Start the app with the "/" named route. In this case, the app starts
+      // on the FirstScreen widget.
+      // 使用“/”命名路由来启动应用（Start the app with the "/" named route. In our case, the app will start）
+      // 在这里，应用将从 FirstScreen Widget 启动（on the FirstScreen Widget）
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        // 当我们跳转到“/”时，构建 FirstScreen Widget（When we navigate to the "/" route, build the FirstScreen Widget）
+        '/': (context) => FirstRoute(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        // 当我们跳转到“/second”时，构建 SecondScreen Widget（When we navigate to the "/second" route, build the SecondScreen Widget）
+        '/second': (context) => SecondRoute(),
+      },
     ),
   );
 
