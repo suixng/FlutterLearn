@@ -1068,48 +1068,48 @@ class _ShoppingListState extends State<ShopppingList> {
 // }
 
 //Returning Data
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Return Data Demo'),
-      ),
-      body: Center(child: SelectionButton()),
-    );
-  }
-}
+// class HomeScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Return Data Demo'),
+//       ),
+//       body: Center(child: SelectionButton()),
+//     );
+//   }
+// }
 
-class SelectionButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        _navigateAndDisplaySelection(context);
-      },
-      child: Text('Pick on option,any option'),
-    );
-  }
+// class SelectionButton extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton(
+//       onPressed: () {
+//         _navigateAndDisplaySelection(context);
+//       },
+//       child: Text('Pick on option,any option'),
+//     );
+//   }
 
-  // A method that launches the SelectionScreen and awaits the result from
-  // Navigator.pop.
-  void _navigateAndDisplaySelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
-    final result = await Navigator.push(
-      context,
-      // Create the SelectionScreen in the next step.
-      MaterialPageRoute(builder: (context) => SelectionScreen()),
-    );
+//   // A method that launches the SelectionScreen and awaits the result from
+//   // Navigator.pop.
+//   void _navigateAndDisplaySelection(BuildContext context) async {
+//     // Navigator.push returns a Future that completes after calling
+//     // Navigator.pop on the Selection Screen.
+//     final result = await Navigator.push(
+//       context,
+//       // Create the SelectionScreen in the next step.
+//       MaterialPageRoute(builder: (context) => SelectionScreen()),
+//     );
 
-    // After the Selection Screen returns a result, hide any previous snackbars
-    // and show the new result.
-    // 等选择界面返回结果，先隐藏之前的 snackbars，结果显示在新的 snackbars 里  (After the Selection Screen returns a result, hide any previous snackbars and show the new result!)
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
-  }
-}
+//     // After the Selection Screen returns a result, hide any previous snackbars
+//     // and show the new result.
+//     // 等选择界面返回结果，先隐藏之前的 snackbars，结果显示在新的 snackbars 里  (After the Selection Screen returns a result, hide any previous snackbars and show the new result!)
+//     ScaffoldMessenger.of(context)
+//       ..removeCurrentSnackBar()
+//       ..showSnackBar(SnackBar(content: Text('$result')));
+//   }
+// }
 
 class SelectionScreen extends StatelessWidget {
   @override
@@ -1195,6 +1195,225 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+
+//Return data from a screen
+class ScreenArguments {
+  final String title;
+  final String message;
+
+  ScreenArguments(this.title, this.message);
+}
+
+class ExtractArgumentsScreen extends StatelessWidget {
+  static const routeName = '/extractArguments';
+
+  @override
+  Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(args.title),
+      ),
+      body: Center(
+        child: Text(args.message),
+      ),
+    );
+  }
+}
+
+// A Widget that accepts the necessary arguments via the
+// constructor.
+class PassArgumentsScreen extends StatelessWidget {
+  static const routeName = '/passArguments';
+
+  final String title;
+  final String message;
+
+  // This Widget accepts the arguments as constructor
+  // parameters. It does not extract the arguments from
+  // the ModalRoute.
+  //
+  // The arguments are extracted by the onGenerateRoute
+  // function provided to the MaterialApp widget.
+  const PassArgumentsScreen({
+    Key? key,
+    required this.title,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: Text(message),
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // A button that navigates to a named route.
+            // The named route extracts the arguments
+            // by itself.
+            ElevatedButton(
+              onPressed: () {
+                // When the user taps the button,
+                // navigate to a named route and
+                // provide the arguments as an optional
+                // parameter.
+                Navigator.pushNamed(
+                  context,
+                  ExtractArgumentsScreen.routeName,
+                  arguments: ScreenArguments(
+                    'Extract Arguments Screen',
+                    'This message is extracted in the build method.',
+                  ),
+                );
+              },
+              child: Text('Navigate to screen that extracts arguments'),
+            ),
+            // A button that navigates to a named route.
+            // For this route, extract the arguments in
+            // the onGenerateRoute function and pass them
+            // to the screen.
+            ElevatedButton(
+              onPressed: () {
+                // When the user taps the button, navigate
+                // to a named route and provide the arguments
+                // as an optional parameter.
+                Navigator.pushNamed(
+                  context,
+                  PassArgumentsScreen.routeName,
+                  arguments: ScreenArguments(
+                    'Accept Arguments Screen',
+                    'This message is extracted in the onGenerateRoute function.',
+                  ),
+                );
+              },
+              child: Text('Navigate to a named that accepts arguments'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       routes: {
+//         ExtractArgumentsScreen.routeName: (context) => ExtractArgumentsScreen(),
+//       },
+//       // Provide a function to handle named routes.
+//       // Use this function to identify the named
+//       // route being pushed, and create the correct
+//       // Screen.
+//       onGenerateRoute: (settings) {
+//         // If you push the PassArguments route
+//         if (settings.name == PassArgumentsScreen.routeName) {
+//           // Cast the arguments to the correct
+//           // type: ScreenArguments.
+//           final args = settings.arguments as ScreenArguments;
+
+//           // Then, extract the required data from
+//           // the arguments and pass the data to the
+//           // correct screen.
+//           return MaterialPageRoute(
+//             builder: (context) {
+//               return PassArgumentsScreen(
+//                 title: args.title,
+//                 message: args.message,
+//               );
+//             },
+//           );
+//         }
+//         // The code only supports
+//         // PassArgumentsScreen.routeName right now.
+//         // Other values need to be implemented if we
+//         // add them. The assertion here will help remind
+//         // us of that higher up in the call stack, since
+//         // this assertion would otherwise fire somewhere
+//         // in the framework.
+//         assert(false, 'Need to implement ${settings.name}');
+//         return null;
+//       },
+//       title: 'Navigation with Arguments',
+//       home: HomeScreen(),
+//     );
+//   }
+// }
+
+class HeroApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Transition Demo',
+      home: MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Main Screen'),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return DetailScreen();
+          }));
+        },
+        child: Hero(
+          tag: 'imageHero',
+          child: Image.network(
+            'https://picsum.photos/250?image=9',
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Center(
+          child: Hero(
+            tag: 'imageHero',
+            child: Image.network(
+              'https://picsum.photos/250?image=9',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 //To Do List
 // class Todo {
 //   final String title;
@@ -1544,6 +1763,8 @@ void main() {
   debugPaintSizeEnabled = false; // Set to true for visual layout
   //runApp(MyApp());
 
+  runApp(HeroApp());
+
   // runApp(
   //   MaterialApp(
   //     title: 'Returning Data',
@@ -1558,24 +1779,24 @@ void main() {
   //   ),
   // );
 
-  runApp(
-    MaterialApp(
-      title: 'Named Routes Demo',
-      // Start the app with the "/" named route. In this case, the app starts
-      // on the FirstScreen widget.
-      // 使用“/”命名路由来启动应用（Start the app with the "/" named route. In our case, the app will start）
-      // 在这里，应用将从 FirstScreen Widget 启动（on the FirstScreen Widget）
-      initialRoute: '/',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        // 当我们跳转到“/”时，构建 FirstScreen Widget（When we navigate to the "/" route, build the FirstScreen Widget）
-        '/': (context) => FirstRoute(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        // 当我们跳转到“/second”时，构建 SecondScreen Widget（When we navigate to the "/second" route, build the SecondScreen Widget）
-        '/second': (context) => SecondRoute(),
-      },
-    ),
-  );
+  // runApp(
+  //   MaterialApp(
+  //     title: 'Named Routes Demo',
+  //     // Start the app with the "/" named route. In this case, the app starts
+  //     // on the FirstScreen widget.
+  //     // 使用“/”命名路由来启动应用（Start the app with the "/" named route. In our case, the app will start）
+  //     // 在这里，应用将从 FirstScreen Widget 启动（on the FirstScreen Widget）
+  //     initialRoute: '/',
+  //     routes: {
+  //       // When navigating to the "/" route, build the FirstScreen widget.
+  //       // 当我们跳转到“/”时，构建 FirstScreen Widget（When we navigate to the "/" route, build the FirstScreen Widget）
+  //       '/': (context) => FirstRoute(),
+  //       // When navigating to the "/second" route, build the SecondScreen widget.
+  //       // 当我们跳转到“/second”时，构建 SecondScreen Widget（When we navigate to the "/second" route, build the SecondScreen Widget）
+  //       '/second': (context) => SecondRoute(),
+  //     },
+  //   ),
+  // );
 
   // runApp(MaterialApp(
   //   title: 'Passing Data',
