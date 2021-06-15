@@ -1708,7 +1708,18 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
     //Simplifying with AnimationWidget
-    animation = Tween<double>(begin: 0, end: 300).animate(controller);
+    //animation = Tween<double>(begin: 0, end: 300).animate(controller);
+
+    //Monitoring the progress of the animation
+    animation = Tween<double>(begin: 0, end: 300).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      })
+      ..addStatusListener((state) => print('$state'));
 
     // animation = Tween<double>(begin: 0, end: 300).animate(controller)
     //   ..addListener(() {
@@ -1734,6 +1745,7 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
   // }
 
   //Simplifying with AnimationWidget
+  @override
   Widget build(BuildContext context) => AnimatedLogo(animation: animation);
 
   @override
